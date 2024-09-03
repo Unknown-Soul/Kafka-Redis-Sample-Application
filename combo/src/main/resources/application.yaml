@@ -1,0 +1,48 @@
+server:
+  port: 9292
+
+spring:
+  application:
+    name: combo
+  profiles:
+    active: local
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+  kafka:
+    bootstrap-servers: 172.29.33.147:9092
+    streams:
+      application-id: combo
+      properties:
+        # These properties are specific to Kafka Streams
+        default.key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+        default.value.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+    consumer:
+      #      bootstrap-servers: 172.29.33.147:9092
+      group-id: combo
+      auto-offset-reset: earliest
+      enable-auto-commit: true
+    properties:
+      default:
+        deserialization.exception.handler: org.apache.kafka.streams.errors.LogAndFailExceptionHandler
+  data:
+    redis:
+      host: 172.29.33.147
+      port: 6379
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/combo
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    initialization-mode: always
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate.format_sql: true
